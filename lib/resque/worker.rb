@@ -124,6 +124,7 @@ module Resque
             exit! unless @cant_fork
           end
 
+          redis.del("worker:#{self}")
           @child = nil
         else
           break if interval.to_i == 0
@@ -355,7 +356,6 @@ module Resque
     # and tells Redis we processed a job.
     def done_working
       processed!
-      redis.del("worker:#{self}")
     end
 
     # How many jobs has this worker processed? Returns an int.
