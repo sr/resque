@@ -263,13 +263,20 @@ module Resque
     def kill_child
       if @child
         log! "Killing child at #{@child}"
-        if system("ps -o pid,state -p #{@child}")
+        if child_running?
           Process.kill("KILL", @child) rescue nil
         else
           log! "Child #{@child} not found, restarting."
           shutdown
         end
       end
+    end
+
+    def child_running?
+      Process.kill(0, @child)
+      true
+    rescue Errno::ESRCH
+      false
     end
 
     # Stop processing jobs after the current one has completed (if we're
