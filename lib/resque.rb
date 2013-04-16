@@ -177,7 +177,7 @@ module Resque
   #
   # Returns a Ruby object.
   def pop(queue)
-    decode redis.lpop("queue:#{queue}")
+    decode redis.rpop("queue:#{queue}")
   end
 
   # Returns an integer representing the size of a queue.
